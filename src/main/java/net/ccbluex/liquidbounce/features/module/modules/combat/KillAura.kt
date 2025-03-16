@@ -136,7 +136,7 @@ object KillAura : Module("KillAura", Category.COMBAT, Keyboard.KEY_R) {
     private val onDestroyBlock by boolean("OnDestroyBlock", false)
 
     // AutoBlock
-    val autoBlock by choices("AutoBlock", arrayOf("Off", "Packet", "Fake"), "Packet")
+    val autoBlock by choices("AutoBlock", arrayOf("Off", "Packet", "Fake", "Vanilla ReBlock"), "Packet")
     private val blockMaxRange by float("BlockMaxRange", 3f, 0f..8f) { autoBlock == "Packet" }
     private val unblockMode by choices(
         "UnblockMode", arrayOf("Stop", "Switch", "Empty"), "Stop"
@@ -483,6 +483,14 @@ object KillAura : Module("KillAura", Category.COMBAT, Keyboard.KEY_R) {
                     renderBlocking = true
                 }
             }
+
+            // Implementing Vanilla ReBlock logic
+            if (autoBlock == "VanillaReBlock" && hitTicks == 1 /* || !blocking */) {
+                block(false, true)
+            }
+        }
+
+    
 
             // Usually when you butterfly click, you end up clicking two (and possibly more) times in a single tick.
             // Sometimes you also do not click. The positives outweigh the negatives, however.
